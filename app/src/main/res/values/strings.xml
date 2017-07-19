@@ -6,4 +6,12 @@
     <string name="title_activity_note_detail">NoteDetailActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="about">About</string>
+    <string name="ic_note">Add Note</string>
+    <string name="add_note">Add Note</string>
+    <string name="title_activity_add_note_acivity">AddNoteAcivity</string>
+    <string name="notes">Notes</string>
+    <string name="notes_detail">Note Detail</string>
+    <string name="enter_note">Enter Note</string>
+    <string name="title">Title</string>
 </resources>

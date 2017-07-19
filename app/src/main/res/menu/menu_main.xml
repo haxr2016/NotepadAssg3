@@ -5,12 +5,14 @@
     <item
         android:id="@+id/note_detail"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:title="@string/add_note"
+        android:icon="@drawable/ic_add_black_24dp"
+        app:showAsAction="always" />
     <item
         android:id="@+id/about"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:icon="@drawable/ic_info_black_24dp"
+        android:title="@string/about"
+        app:showAsAction="always" />
 
 </menu>

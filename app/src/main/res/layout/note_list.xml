@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp "
+    android:maxHeight="360dp"
+    app:cardElevation="4dp"
+    android:minWidth="200dp"
+    app:cardBackgroundColor="@color/card_bg"
+    app:cardCornerRadius="6dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="4dp"
+            android:background="@android:color/transparent"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:text="Server-Side Paging" />
+
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="4dp"
+            android:textColor="@color/colorPrimary_50"
+            android:textSize="8sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:text="May 12th 1017 32:23:23 AM" />
+
+        <TextView
+            android:id="@+id/lu_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="4dp"
+            android:textColor="@color/colorPrimaryDark_50"
+            android:textSize="14sp"
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:text="The PaginationControlsComponent can be styled by simply overriding the default styles. To overcome Angular's view encapsulation, you may need to use the /deep/ operator to target it (depending on the type of encapsulation your component is using)." />
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
