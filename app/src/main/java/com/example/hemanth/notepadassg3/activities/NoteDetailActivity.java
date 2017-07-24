@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.JsonReader;
+import android.util.JsonWriter;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -20,9 +22,18 @@ import com.example.hemanth.notepadassg3.models.Note;
 import com.example.hemanth.notepadassg3.R;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 public class NoteDetailActivity extends AppCompatActivity {
@@ -58,6 +69,7 @@ public class NoteDetailActivity extends AppCompatActivity {
         if (getIntent().getStringExtra(TYPE).equals(ADD_NOTE)) {
             getSupportActionBar().setTitle("Add Note");
             note = new Note();
+            note.setId(UUID.randomUUID().toString());
             note.setLu_time("" + System.currentTimeMillis());
             Date netDate = new Date(Long.parseLong(note.getLu_time()));
             luTime.setText(DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(netDate));
@@ -162,7 +174,7 @@ public class NoteDetailActivity extends AppCompatActivity {
     }
 
     private void saveNote() {
-        if(title.getText().toString().isEmpty()){
+        if (title.getText().toString().isEmpty()) {
             Toast.makeText(NoteDetailActivity.this, "Un titled Note cant be saved", Toast.LENGTH_SHORT).show();
             NoteDetailActivity.this.onBackPressed();
             return;
@@ -181,35 +193,79 @@ public class NoteDetailActivity extends AppCompatActivity {
 
             try {
 
-                File dir = new File(NoteDetailActivity.this.getApplicationContext().getFilesDir().getAbsolutePath() + AppConstants.NOTES_DIRECTORY);
-                if (!dir.exists()) {
-                    if (!dir.mkdir())
-                        return false;
-                }
-                String fileName = notes[0].getFilePath();
-                if (fileName != null && fileName.isEmpty()) {
-                    fileName = "note_" + UUID.randomUUID().toString() + ".json";
-                    notes[0].setFilePath(dir.getAbsolutePath() + File.separator + fileName);
-                }
+                File filesDir = new File(NoteDetailActivity.this.getApplicationContext().getFilesDir().getAbsolutePath());
 
-                File data = new File(notes[0].getFilePath());
+                File noteFile = new File(filesDir.getAbsolutePath() + "/" + "notes.json");
 
-                if (!data.exists()) {
-                    if (!data.createNewFile()) {
+                if (!noteFile.exists()) {
+                    if (!noteFile.createNewFile()) {
                         return false;
+                    } else {
+                        InputStream inputStream = new FileInputStream(noteFile);
+                        OutputStream outputStream = new FileOutputStream(noteFile);
+                        JsonReader reader = new JsonReader(new InputStreamReader(inputStream, "UTF-8"));
+                        JsonWriter writer = new JsonWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                        try {
+                            readNotesArray(reader, writer, notes[0]);
+                        } finally {
+                            reader.close();
+                            writer.close();
+                        }
                     }
                 }
-                String jsonData = Note.getJsonFromModel(notes[0]);
 
-                FileWriter file = new FileWriter(data);
-                file.write(jsonData);
-                file.flush();
-                file.close();
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
             }
+        }
+
+        private void readNotesArray(JsonReader reader, JsonWriter writer, Note note) throws IOException {
+
+            reader.beginArray();
+            writer.beginArray();
+            while (reader.hasNext()) {
+                writer.beginObject();
+
+                if (readNote(reader, writer, note)) {
+                    writeNotes(writer, note);
+                    return;
+                }
+                writer.endObject();
+            }
+            reader.endArray();
+            writer.endArray();
+        }
+
+        private void writeNotes(JsonWriter writer, Note note) throws IOException {
+
+            writer.name(Note.TITLE).value(note.getTitle());
+            writer.name(Note.CONTENT).value(note.getContent());
+            writer.name(Note.LU_TIME).value(note.getLu_time());
+            writer.name(Note.ID).value(note.getId());
+            writer.endObject();
+        }
+
+
+        public Boolean readNote(JsonReader reader, JsonWriter writer, Note note) throws IOException {
+            String id = "";
+
+            reader.beginObject();
+            while (reader.hasNext()) {
+                String name = reader.nextName();
+                if (name.equals("id")) {
+                    id = reader.nextString();
+                    if (id.equalsIgnoreCase(NoteDetailActivity.this.note.getId())) {
+                        return true;
+                    }
+
+                } else {
+                    reader.skipValue();
+                }
+            }
+            reader.endObject();
+            return false;
         }
 
         @Override

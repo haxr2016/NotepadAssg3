@@ -11,20 +11,31 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.JsonReader;
+import android.util.JsonWriter;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.example.hemanth.notepadassg3.extras.AppConstants;
 import com.example.hemanth.notepadassg3.models.Note;
 import com.example.hemanth.notepadassg3.adapter.NotesRvAdapter;
 import com.example.hemanth.notepadassg3.R;
 import com.example.hemanth.notepadassg3.listners.RecyclerTouchListener;
-import com.example.hemanth.notepadassg3.utils.FileUtils;
+import com.example.hemanth.notepadassg3.utils.JsonReadWriteUtils;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -85,13 +96,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void deleteNote(Note note) {
-        File file = new File(note.getFilePath());
-        if (!file.delete()) {
-            Toast.makeText(MainActivity.this, "Couldn't deleted", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(MainActivity.this, "Note deleted", Toast.LENGTH_SHORT).show();
-            new LoadFiles().execute();
-        }
+        new DeleteNote().execute(note);
     }
 
     @Override
@@ -147,22 +152,123 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public class DeleteNote extends AsyncTask<Note, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Note... notes) {
+
+            try {
+
+                File filesDir = new File(MainActivity.this.getApplicationContext().getFilesDir().getAbsolutePath());
+
+                File noteFile = new File(filesDir.getAbsolutePath() + "/" + "notes.json");
+
+                if (!noteFile.exists()) {
+                    if (!noteFile.createNewFile()) {
+                        return false;
+                    } else {
+                        InputStream inputStream = new FileInputStream(noteFile);
+                        OutputStream outputStream = new FileOutputStream(noteFile);
+                        JsonReader reader = new JsonReader(new InputStreamReader(inputStream, "UTF-8"));
+                        JsonWriter writer = new JsonWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                        try {
+                            readNotesArray(reader, writer, notes[0]);
+                        } finally {
+                            writer.flush();
+                            reader.close();
+                            writer.close();
+                        }
+                    }
+                }
+
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        private void readNotesArray(JsonReader reader, JsonWriter writer, Note note) throws IOException {
+
+            reader.beginArray();
+            writer.beginArray();
+            while (reader.hasNext()) {
+
+                if (readNote(reader, writer, note)) {
+                    deleteNotes(writer, note);
+                    return;
+                }
+                writer.beginObject();
+                writer.endObject();
+            }
+            reader.endArray();
+            writer.endArray();
+        }
+
+        private void deleteNotes(JsonWriter writer, Note note) throws IOException {
+
+            writer.beginObject();
+            writer.nullValue();
+            writer.endObject();
+        }
+
+
+        public Boolean readNote(JsonReader reader, JsonWriter writer, Note note) throws IOException {
+            String id = "";
+
+            reader.beginObject();
+            while (reader.hasNext()) {
+                String name = reader.nextName();
+                if (name.equals("id")) {
+                    id = reader.nextString();
+                    if (id.equalsIgnoreCase(note.getId())) {
+                        return true;
+                    }
+
+                } else {
+                    reader.skipValue();
+                }
+            }
+            reader.endObject();
+            return false;
+        }
+
+
+        @Override
+        protected void onPostExecute(Boolean deleted) {
+
+            if (!deleted) {
+                Toast.makeText(MainActivity.this, "Couldn't deleted", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(MainActivity.this, "Note deleted", Toast.LENGTH_SHORT).show();
+                new LoadFiles().execute();
+            }
+        }
+    }
+
     public class LoadFiles extends AsyncTask<Void, Void, ArrayList<Note>> {
 
         @Override
         protected ArrayList<Note> doInBackground(Void... nothing) {
 
             ArrayList<Note> notes = new ArrayList<>();
-            File notesDir = new File(MainActivity.this.getApplicationContext().getFilesDir().getAbsolutePath() + AppConstants.NOTES_DIRECTORY);
-            if (!notesDir.exists() && !notesDir.isDirectory()) {
-                return null;
-            }
 
-            File[] fileList = notesDir.listFiles();
-            for (File f : fileList) {
-                if (f.isFile() && f.getPath().endsWith(".json")) {
-                    String data = FileUtils.readFromFile(f);
-                    notes.add(Note.getModelFromJson(data));
+            File filesDir = new File(MainActivity.this.getApplicationContext().getFilesDir().getAbsolutePath());
+
+            File noteFile = new File(filesDir.getAbsolutePath() + "/" + "notes.json");
+
+            if (noteFile.exists()) {
+                String data = JsonReadWriteUtils.readFromFile(noteFile);
+
+                try {
+                    JSONArray jsonArray = new JSONArray(data);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject object = jsonArray.getJSONObject(i);
+                        if (object != null)
+                            notes.add(Note.getModelFromJson(object));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
             return notes;

@@ -12,13 +12,12 @@ import java.util.Comparator;
 public class Note implements Parcelable, Comparator<Note> {
 
     public static final String TITLE = "title";
-    public static final String FILEPATH = "filepath";
+    public static final String ID = "id";
     public static final String CONTENT = "content";
     public static final String LU_TIME = "lu_time";
 
     private String id;
     private String title;
-    private String filePath;
     private String content;
     private String lu_time;
 
@@ -26,14 +25,13 @@ public class Note implements Parcelable, Comparator<Note> {
         this.title = s;
         this.content = s1;
         this.lu_time = "";
-        this.filePath = path;
+        this.id="";
     }
 
     protected Note(Parcel in) {
         id = in.readString();
         title = in.readString();
         content = in.readString();
-        filePath = in.readString();
         lu_time = in.readString();
     }
 
@@ -50,9 +48,10 @@ public class Note implements Parcelable, Comparator<Note> {
     };
 
     public Note() {
-        this.filePath = "";
         this.title = "";
         this.content = "";
+        this.id="";
+
     }
 
     public String getId() {
@@ -97,26 +96,15 @@ public class Note implements Parcelable, Comparator<Note> {
         parcel.writeString(id);
         parcel.writeString(title);
         parcel.writeString(content);
-        parcel.writeString(filePath);
         parcel.writeString(lu_time);
     }
 
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
-
-    public static Note getModelFromJson(String jsonData) {
+    public static Note getModelFromJson(JSONObject jsonObject) {
         try {
-            JSONObject jsonObject = new JSONObject(jsonData);
             Note note = new Note();
+            note.setId(jsonObject.getString(ID));
             note.setTitle(jsonObject.getString(TITLE));
             note.setContent(jsonObject.getString(CONTENT));
-            note.setFilePath(jsonObject.getString(FILEPATH));
             note.setLu_time(jsonObject.getString(LU_TIME));
             return note;
         } catch (JSONException e) {
@@ -131,7 +119,7 @@ public class Note implements Parcelable, Comparator<Note> {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put(TITLE, note.getTitle());
             jsonObject.put(CONTENT, note.getContent());
-            jsonObject.put(FILEPATH, note.getFilePath());
+            jsonObject.put(ID, note.getId());
             jsonObject.put(LU_TIME, note.getLu_time());
             return jsonObject.toString();
         } catch (JSONException e) {
