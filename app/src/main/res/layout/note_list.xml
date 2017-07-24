@@ -1,65 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp "
+    android:layout_margin="16dp"
     android:maxHeight="360dp"
-    app:cardElevation="4dp"
     android:minWidth="200dp"
     app:cardBackgroundColor="@color/card_bg"
-    app:cardCornerRadius="6dp">
+    app:cardCornerRadius="6dp"
+    app:cardElevation="4dp">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
 
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="4dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="parent"
             android:background="@android:color/transparent"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:maxLines="1"
             android:ellipsize="end"
-            android:text="Server-Side Paging" />
-
-        <TextView
-            android:id="@+id/content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="8dp"
+            android:maxLines="1"
             android:paddingBottom="8dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="4dp"
-            android:textColor="@color/colorPrimary_50"
-            android:textSize="8sp"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:text="May 12th 1017 32:23:23 AM" />
+            android:paddingStart="16dp"
+            android:paddingEnd="4dp"
+            android:paddingTop="8dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteY="97dp"
+            tools:layout_editor_absoluteX="8dp" />
 
         <TextView
             android:id="@+id/lu_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="4dp"
-            android:textColor="@color/colorPrimaryDark_50"
-            android:textSize="14sp"
-            android:maxLines="3"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title"
             android:ellipsize="end"
-            android:text="The PaginationControlsComponent can be styled by simply overriding the default styles. To overcome Angular's view encapsulation, you may need to use the /deep/ operator to target it (depending on the type of encapsulation your component is using)." />
+            android:maxLines="1"
+            android:paddingBottom="8dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="4dp"
+            android:paddingTop="8dp"
+            android:textColor="@color/colorPrimary_50"
+            android:textSize="12sp"
+            tools:layout_editor_absoluteY="97dp"
+            tools:layout_editor_absoluteX="24dp" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lu_time"
+            android:paddingBottom="8dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="4dp"
+            android:paddingTop="8dp"
+            android:textColor="@color/colorPrimaryDark_50"
+            android:textSize="16sp"
+            tools:layout_editor_absoluteY="97dp"
+            tools:layout_editor_absoluteX="24dp" />
+
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.v7.widget.CardView>

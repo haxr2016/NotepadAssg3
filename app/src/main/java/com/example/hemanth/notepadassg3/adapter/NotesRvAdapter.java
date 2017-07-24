@@ -1,4 +1,4 @@
-package com.example.hemanth.notepadassg3;
+package com.example.hemanth.notepadassg3.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,6 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.hemanth.notepadassg3.models.Note;
+import com.example.hemanth.notepadassg3.R;
+
+import org.apache.http.conn.ConnectTimeoutException;
+
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -39,10 +46,23 @@ public class NotesRvAdapter extends RecyclerView.Adapter<NotesRvAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Note movie = noteList.get(position);
-        holder.title.setText(movie.getTitle());
-        holder.content.setText(movie.getContent());
-        holder.luTime.setText(movie.getLu_time() + "");
+        Note note = noteList.get(position);
+        if (note != null) {
+            holder.title.setText(note.getTitle());
+            holder.content.setText(getEllipsizeContent(note.getContent()));
+
+            Date netDate = new Date(Long.parseLong(note.getLu_time()));
+            holder.luTime.setText(DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(netDate));
+
+        }
+    }
+
+    private String getEllipsizeContent(String content) {
+        if (content.length() > 80) {
+            return (content.substring(0, 77) + "...");
+        } else {
+            return content;
+        }
     }
 
     @Override

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.hemanth.notepadassg3.NoteDetailActivity"
+    android:background="@color/colorPrimary"
+    tools:context="com.example.hemanth.notepadassg3.activities.NoteDetailActivity"
     tools:showIn="@layout/note_detail_acivity">
 
 
@@ -27,22 +28,21 @@
         android:layout_width="match_parent"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:cardElevation="4dp"
         app:cardCornerRadius="6dp"
-        android:layout_marginTop="8dp"
-        tools:layout_editor_absoluteY="0dp"
-        tools:layout_editor_absoluteX="8dp">
+        android:layout_marginTop="68dp"
+        >
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:fillViewport="true"
-        tools:layout_editor_absoluteY="8dp"
-        tools:layout_editor_absoluteX="8dp">
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -57,12 +57,13 @@
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:paddingLeft="8dp"
+                android:maxLines="1"
                 android:paddingRight="4dp"
                 android:textColor="@color/colorPrimary"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:hint="@string/title"
-                android:text="Server-Side Paging" />
+                 />
 
             <TextView
                 android:id="@+id/lu_time"
@@ -73,15 +74,15 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="4dp"
                 android:textColor="@color/colorPrimary_50"
-                android:textSize="8sp"
+                android:textSize="14sp"
                 android:maxLines="1"
                 android:ellipsize="end"
-                android:text="May 12th 1017 32:23:23 AM" />
+                 />
 
             <EditText
                 android:id="@+id/content"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:gravity="top"
                 android:paddingTop="8dp"
@@ -90,8 +91,8 @@
                 android:paddingRight="4dp"
                 android:hint="@string/enter_note"
                 android:textColor="@color/colorPrimaryDark_50"
-                android:textSize="14sp"
-                android:text="The PaginationControlsComponent can be styled by simply overriding the default styles. To overcome Angular's view encapsulation, you may need to use the /deep/ operator to target it (depending on the type of encapsulation your component is using)." />
+                android:textSize="18sp"
+                 />
         </LinearLayout>
     </ScrollView>
     </android.support.v7.widget.CardView>

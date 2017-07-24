@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NotepadAssg3</string>
+    <string name="app_name">Notepad</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_about">AboutActivity</string>
 
@@ -14,4 +14,7 @@
     <string name="notes_detail">Note Detail</string>
     <string name="enter_note">Enter Note</string>
     <string name="title">Title</string>
+    <string name="_2017_hemanth_balakrishna">\u00A9 2017, Hemanth Balakrishna</string>
+    <string name="version_1_0">version 1.0</string>
+    <string name="save_note">Save</string>
 </resources>
