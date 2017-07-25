@@ -9,8 +9,6 @@ import android.widget.TextView;
 import com.example.hemanth.notepadassg3.models.Note;
 import com.example.hemanth.notepadassg3.R;
 
-import org.apache.http.conn.ConnectTimeoutException;
-
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;

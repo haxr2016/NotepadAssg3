@@ -22,7 +22,6 @@ import com.example.hemanth.notepadassg3.models.Note;
 import com.example.hemanth.notepadassg3.adapter.NotesRvAdapter;
 import com.example.hemanth.notepadassg3.R;
 import com.example.hemanth.notepadassg3.listners.RecyclerTouchListener;
-import com.example.hemanth.notepadassg3.utils.FileUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
