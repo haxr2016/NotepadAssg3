@@ -25,6 +25,9 @@ import com.example.hemanth.notepadassg3.listners.RecyclerTouchListener;
 import com.example.hemanth.notepadassg3.utils.FileUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -159,13 +162,46 @@ public class MainActivity extends AppCompatActivity {
             }
 
             File[] fileList = notesDir.listFiles();
-            for (File f : fileList) {
-                if (f.isFile() && f.getPath().endsWith(".json")) {
-                    String data = FileUtils.readFromFile(f);
-                    notes.add(Note.getModelFromJson(data));
+            try {
+                for (File f : fileList) {
+
+                    if (f.isFile() && f.getPath().endsWith(".json")) {
+                        FileInputStream in = new FileInputStream(f);
+                        JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
+                        Note note = readNote(reader);
+                        if (note != null)
+                            notes.add(note);
+                        reader.close();
+                    }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
             }
             return notes;
+        }
+
+        public Note readNote(JsonReader reader) throws IOException {
+            Note note = new Note();
+            reader.beginObject();
+            while (reader.hasNext()) {
+                String name = reader.nextName();
+                if (name.equals(Note.ID)) {
+                    note.setId(reader.nextString());
+                } else if (name.equals(Note.TITLE)) {
+                    note.setTitle(reader.nextString());
+                } else if (name.equals(Note.CONTENT)) {
+                    note.setContent(reader.nextString());
+                } else if (name.equals(Note.FILEPATH)) {
+                    note.setFilePath(reader.nextString());
+                } else if (name.equals(Note.LU_TIME)) {
+                    note.setLu_time(reader.nextString());
+                } else {
+                    reader.skipValue();
+                }
+            }
+            reader.endObject();
+            return note;
         }
 
         @Override

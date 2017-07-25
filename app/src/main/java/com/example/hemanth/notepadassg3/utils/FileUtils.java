@@ -1,6 +1,9 @@
 package com.example.hemanth.notepadassg3.utils;
 
+import android.util.JsonReader;
 import android.util.Log;
+
+import com.example.hemanth.notepadassg3.models.Note;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -27,6 +30,8 @@ public class FileUtils {
 
             if (inputStream != null) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+
+
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                 String receiveString = "";
                 StringBuilder stringBuilder = new StringBuilder();
