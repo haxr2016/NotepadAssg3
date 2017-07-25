@@ -12,6 +12,7 @@ import java.util.Comparator;
 public class Note implements Parcelable, Comparator<Note> {
 
     public static final String TITLE = "title";
+    public static final String ID = "id";
     public static final String FILEPATH = "filepath";
     public static final String CONTENT = "content";
     public static final String LU_TIME = "lu_time";
@@ -23,6 +24,7 @@ public class Note implements Parcelable, Comparator<Note> {
     private String lu_time;
 
     public Note(String s, String s1, String s2, String path) {
+        this.id = "";
         this.title = s;
         this.content = s1;
         this.lu_time = "";
@@ -50,6 +52,7 @@ public class Note implements Parcelable, Comparator<Note> {
     };
 
     public Note() {
+        this.id = "";
         this.filePath = "";
         this.title = "";
         this.content = "";
@@ -114,6 +117,7 @@ public class Note implements Parcelable, Comparator<Note> {
         try {
             JSONObject jsonObject = new JSONObject(jsonData);
             Note note = new Note();
+            note.setId(jsonObject.getString(ID));
             note.setTitle(jsonObject.getString(TITLE));
             note.setContent(jsonObject.getString(CONTENT));
             note.setFilePath(jsonObject.getString(FILEPATH));
@@ -129,6 +133,7 @@ public class Note implements Parcelable, Comparator<Note> {
     public static String getJsonFromModel(Note note) {
         try {
             JSONObject jsonObject = new JSONObject();
+            jsonObject.put(ID,note.getId());
             jsonObject.put(TITLE, note.getTitle());
             jsonObject.put(CONTENT, note.getContent());
             jsonObject.put(FILEPATH, note.getFilePath());

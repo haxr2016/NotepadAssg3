@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.JsonWriter;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -20,7 +21,10 @@ import com.example.hemanth.notepadassg3.models.Note;
 import com.example.hemanth.notepadassg3.R;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -162,11 +166,12 @@ public class NoteDetailActivity extends AppCompatActivity {
     }
 
     private void saveNote() {
-        if(title.getText().toString().isEmpty()){
+        if (title.getText().toString().isEmpty()) {
             Toast.makeText(NoteDetailActivity.this, "Un titled Note cant be saved", Toast.LENGTH_SHORT).show();
             NoteDetailActivity.this.onBackPressed();
             return;
         }
+        note.setId(UUID.randomUUID().toString());
         note.setTitle(title.getText().toString());
         note.setContent(noteEt.getText().toString());
         note.setLu_time("" + System.currentTimeMillis());
@@ -199,18 +204,30 @@ public class NoteDetailActivity extends AppCompatActivity {
                         return false;
                     }
                 }
-                String jsonData = Note.getJsonFromModel(notes[0]);
 
-                FileWriter file = new FileWriter(data);
-                file.write(jsonData);
-                file.flush();
-                file.close();
+                FileOutputStream out = new FileOutputStream(data);
+                JsonWriter writer = new JsonWriter(new OutputStreamWriter(out, "UTF-8"));
+                writeNote(writer, notes[0]);
+                writer.flush();
+                writer.close();
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
             }
         }
+
+
+        private void writeNote(JsonWriter writer, Note note) throws IOException {
+            writer.beginObject();
+            writer.name(Note.ID).value(note.getId());
+            writer.name(Note.TITLE).value(note.getTitle());
+            writer.name(Note.CONTENT).value(note.getContent());
+            writer.name(Note.LU_TIME).value(note.getLu_time());
+            writer.name(Note.FILEPATH).value(note.getFilePath());
+            writer.endObject();
+        }
+
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
